@@ -88,6 +88,7 @@
       <template #footer>
         <el-button @click="impactDialogVisible = false">取消</el-button>
         <el-button type="danger" @click="confirmDelete">确认删除</el-button>
+        <el-button type="success" @click="exportReport">导出报告</el-button>
       </template>
     </el-dialog>
   </div>
@@ -111,6 +112,97 @@ th {
 <script setup>
 import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
+import {
+  Document,
+  Packer,
+  Paragraph,
+  Table,
+  TableRow,
+  TableCell,
+  TextRun,
+} from "docx"
+import { saveAs } from "file-saver"
+
+async function exportReport() {
+
+  const doc = new Document({
+    creator: "系统自动生成",       // ← 必须提供
+    title: "删除影响评估报告",       // ← 推荐提供
+    description: "基于项目能力冗余度与满足度的删除影响分析",
+    styles: {
+      paragraphStyles: [
+        {
+          id: "Normal",
+          name: "Normal",
+          run: {
+            font: "Arial",
+            size: 24,
+          },
+        },
+      ],
+    },
+    sections: [
+      {
+        properties: {},
+        children: [
+          new Paragraph({
+            text: "删除影响评估报告",
+            heading: "Heading1",
+          }),
+          // 丢失能力
+          new Paragraph({ text: "一、丢失能力列表：" }),
+          new Paragraph({
+            children: lostAbilities.value.map((value) =>
+                new TextRun(`- 能力${value}：${allAbilities[value].label} `)
+            ),
+          }),
+          // 影响程度
+          new Paragraph({
+            text: `二、总体影响程度：${impactLevel.value}`,
+            spacing: { before: 200 },
+          }),
+          // 影响对比表格
+          new Paragraph({ text: "三、各项目影响对比：" }),
+          createImpactTable(),
+        ],
+      },
+    ],
+  })
+
+  // 2. 生成 Blob 并触发下载
+  const blob = await Packer.toBlob(doc)
+  saveAs(blob, "删除影响评估报告.docx")
+}
+
+// 构建 ECharts 表格对应的 Word 表格
+function createImpactTable() {
+  // 表头行
+  const header = new TableRow({
+    children: ["项目", "原冗余度", "新冗余度", "Δ冗余度"]
+        .map(colText => new TableCell({
+          children: [
+            new Paragraph({ text: colText })
+          ]
+        }))
+  })
+
+  // 数据行
+  const rows = impactData.value.map(item => new TableRow({
+    children: [
+      new TableCell({ children: [ new Paragraph({ text: item.name }) ] }),
+      new TableCell({ children: [ new Paragraph({ text: item.oldRedundancy }) ] }),
+      new TableCell({ children: [ new Paragraph({ text: item.newRedundancy }) ] }),
+      new TableCell({ children: [ new Paragraph({ text: item.delta }) ] }),
+    ]
+  }))
+
+  return new Table({
+    rows: [ header, ...rows ],
+    width: { size: 100, type: "pct" },
+  })
+}
+
+
 
 window.addEventListener('error', e => {
   if (e.message && e.message.includes('ResizeObserver loop')) {

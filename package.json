@@ -2,16 +2,20 @@
   "name": "vue-gantt-schedule-timeline-calendar-example",
   "version": "0.1.18",
   "private": true,
+  "homepage": "https://z95876.github.io/gantt",
   "scripts": {
     "serve": "set NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service serve",
-    "build": "NODE_OPTIONS=--openssl-legacy-provider vue-cli-service build",
-    "lint": "NODE_OPTIONS=--openssl-legacy-provider vue-cli-service lint"
+    "build": "cross-env NODE_OPTIONS=--openssl-legacy-provider vue-cli-service build",
+    "lint": "NODE_OPTIONS=--openssl-legacy-provider vue-cli-service lint",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "core-js": "^3.40.0",
     "dhtmlx-gantt": "^9.0.10",
+    "docx": "^9.5.0",
     "echarts": "^5.6.0",
     "element-plus": "^2.9.9",
+    "file-saver": "^2.0.5",
     "frappe-gantt": "^1.0.3",
     "gantt-schedule-timeline-calendar": "^3.40.0",
     "vue": "^3.5.13",
@@ -24,8 +28,10 @@
     "@vue/cli-service": "^5.0.8",
     "@vue/compiler-sfc": "^3.5.13",
     "babel-eslint": "^10.1.0",
+    "cross-env": "^7.0.3",
     "eslint": "^9.20.1",
-    "eslint-plugin-vue": "^9.32.0"
+    "eslint-plugin-vue": "^9.32.0",
+    "gh-pages": "^6.3.0"
   },
   "eslintConfig": {
     "root": true,

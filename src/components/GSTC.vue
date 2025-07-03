@@ -1,8 +1,6 @@
 <template>
   <div>
     <div class="toolbox">
-<!--      <button @click="updateFirstRow">修改第一行</button>-->
-<!--      <button @click="changeZoomLevel">Change zoom level</button>-->
     </div>
     <div class="gstc-wrapper" ref="gstc"></div>
   </div>
@@ -589,35 +587,6 @@ function generateItems() {
     },
   };
 
-  // items = [
-  //   {
-  //     id: GSTCID("0"),
-  //     label: "Item 1",
-  //     rowId: GSTCID("0"),
-  //     time: {
-  //       start: date("2025-03-01").startOf("day").valueOf(),
-  //       end: date("2025-08-02").endOf("day").valueOf(),
-  //     },
-  //   },
-  //   {
-  //     id: GSTCID("1"),
-  //     label: "Item 2",
-  //     rowId: GSTCID("1"),
-  //     time: {
-  //       start: date("2025-03-01").startOf("day").valueOf(),
-  //       end: date("2025-08-02").endOf("day").valueOf(),
-  //     },
-  //   },
-  //   {
-  //     id: GSTCID("2"),
-  //     label: "Item 3",
-  //     rowId: GSTCID("2"),
-  //     time: {
-  //       start: date("2025-03-15").startOf("day").valueOf(),
-  //       end: date("2025-08-20").endOf("day").valueOf(),
-  //     },
-  //   },
-  // ];
   return items;
 }
 
